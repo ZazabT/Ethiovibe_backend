@@ -20,7 +20,7 @@ exports.registerUser = async (req, res) => {
     const existingUser = await User.findOne({ email });
 
     if (existingUser) {
-      return res.status(400).json({ error: [{ msg: 'User already exists with this email' }] });
+      return res.status(400).json({ error: { msg: 'User already exists with this email' } });
     }
 
     // If not exists and pass all validation, create a new user
@@ -34,7 +34,12 @@ exports.registerUser = async (req, res) => {
     await user.save();
 
     // Return 201 status saying User registered successfully
-    res.status(201).json({ msg: 'User registered successfully', user });
+    res.status(201).json({ msg: 'User registered successfully', user : {
+      id : user._id,
+      name : user.name,
+      email : user.email,
+      role : user.role,
+    } });
   } catch (error) {
     console.error({ error: error.message });
 
@@ -73,10 +78,10 @@ exports.loginUser = async (req, res) => {
     }
 
     // Generate the access token (valid for 1 hour)
-    const accessToken = generateToken(existingUser._id, '1h');
+    const accessToken = generateToken({ id: existingUser._id, role: existingUser.role }, '1h');
 
     // Generate the refresh token (valid for 7 days)
-    const refreshToken = generateToken(existingUser._id, '7d');
+    const refreshToken = generateToken({ id: existingUser._id, role: existingUser.role }, '7d');
 
     // Return the response with the tokens and user data (excluding password)
     res.status(200).json({
@@ -87,6 +92,7 @@ exports.loginUser = async (req, res) => {
         id: existingUser._id,
         name: existingUser.name,
         email: existingUser.email,
+        role : existingUser.role,
       },
     });
   } catch (error) {

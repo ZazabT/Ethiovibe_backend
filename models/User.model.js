@@ -29,7 +29,7 @@ const userSchema = new mongoose.Schema({
 // password hashing befor saveing it to mongodb 
 userSchema.pre('save' , async function (next) {
     if(!this.isModified('password')) return next();
-    const salt = await bcrypt.getSalt(10);
+    const salt = await bcrypt.genSalt(10);
     this.password = await bcrypt.hash(this.password , salt);
     next();
 })
@@ -37,8 +37,8 @@ userSchema.pre('save' , async function (next) {
 
 // match or check password is correct
 
-userSchema.method.matchPassword = async function (enterdPassword) {
-    return await bcrypt.compare(enterdPassword , this.password);
+userSchema.methods.matchPassword = async function (enteredPassword) {
+    return await bcrypt.compare(enteredPassword , this.password);
 }
 
 

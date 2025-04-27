@@ -7,13 +7,13 @@ const {registerUser , loginUser} = require('../controllers/user.controller')
 //@route POST /api/users/register
 //@desc Register or create new user
 //@access public
-route.post('register' , registerValidation , registerUser);
+route.post('/register' , registerValidation , registerUser);
 
 
 //@route POST /api/users/login
 //@desc login user to the website
 //@access public
-route.post('register' , logValidation , loginUser);
+route.post('/login' , logValidation , loginUser);
 
 
 
