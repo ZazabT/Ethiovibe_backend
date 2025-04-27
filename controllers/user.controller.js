@@ -68,17 +68,17 @@ exports.loginUser = async (req, res) => {
     // Check if user exists
     const existingUser = await User.findOne({ email });
     if (!existingUser) {
-      return res.status(404).json({ error: [{ msg: 'User with this email doesn\'t exist. Try to register.' }] });
+      return res.status(404).json({ error:'User with this email doesn\'t exist. Try to register.'});
     }
 
     // Check if the password is correct using the matchPassword method
     const isMatch = await existingUser.matchPassword(password);
     if (!isMatch) {
-      return res.status(400).json({ error: [{ msg: 'Invalid password' }] });
+      return res.status(400).json({ error: 'Invalid password' });
     }
 
     // Generate the access token (valid for 1 hour)
-    const accessToken = generateToken({ id: existingUser._id, role: existingUser.role }, '1h');
+    const accessToken = generateToken({ id: existingUser._id, role: existingUser.role }, '40h');
 
     // Generate the refresh token (valid for 7 days)
     const refreshToken = generateToken({ id: existingUser._id, role: existingUser.role }, '7d');
@@ -105,3 +105,9 @@ exports.loginUser = async (req, res) => {
     });
   }
 };
+
+
+// Get user profile
+exports.getProfile = async (req , res)=>{
+   return res.status(200).json(req.user)
+}
