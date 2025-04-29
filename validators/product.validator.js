@@ -1,5 +1,7 @@
 const { body } = require('express-validator');
 
+
+// Product validation
 exports.productValidator = [
     // Name
     body('name')

@@ -20,19 +20,19 @@ router.get('/:id', getProductById);
 // @route POST /api/products
 // @desc Create a new product
 // @access Private (admin)
-router.post('/', protect, restrictTo('admin') , productValidator , createProduct )
+router.post('/', protect, productValidator , createProduct )
 
 
 // @route PUT /api/products/:id
 // @desc Update a product
 // @access Private (admin)
-router.put('/:id', protect, restrictTo('admin') , productValidator , updateProduct);
+router.put('/:id', protect, productValidator , updateProduct);
 
 
 // @route DELETE /api/products/:id
 // @desc Delete a product
 // @access Private (admin)
-router.delete('/:id', protect, restrictTo('admin') , deleteProduct);  
+router.delete('/:id', protect, deleteProduct);  
 
 
 
