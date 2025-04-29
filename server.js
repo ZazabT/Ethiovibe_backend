@@ -7,6 +7,7 @@ const morgan = require('morgan');
 
 // Routes
 const userRoute = require('./routes/user.route');
+const productRoute = require('./routes/product.route');
 
 const app = express();
 
@@ -20,6 +21,7 @@ app.use(morgan('dev'));
 
 // api routes
 app.use('/api/users', userRoute);
+app.use('/api/products', productRoute);
 
 const PORT = process.env.PORT || 3000;
 

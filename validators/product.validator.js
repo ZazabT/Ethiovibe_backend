@@ -1,6 +1,6 @@
 const { body } = require('express-validator');
 
-exports.addProductValidation = [
+exports.productValidator = [
     // Name
     body('name')
         .trim()
@@ -174,7 +174,7 @@ exports.addProductValidation = [
         .withMessage('User must be a valid MongoDB ObjectId'),
 
     // Meta Fields
-    body('meta сайтаTitle')
+    body('metaTitle')
         .optional()
         .trim()
         .isLength({ max: 100 })
