@@ -245,7 +245,10 @@ exports.getSimilarProducts = async (req, res) => {
         const similarProducts = await Product.find({
             _id: { $ne: product._id }, // Exclude the current product
             gender: product.gender,
+            category: product.category,
             material: product.material,
+            isDeleted: false,
+            isPublished: true,
         }).limit(8);
 
         return res.status(200).json({
