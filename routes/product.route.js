@@ -6,7 +6,7 @@ const {createProduct ,getAllProducts ,getProductById ,updateProduct ,deleteProdu
 const {createProductValidator , updateProductValidator} = require('../validators/product.validator');
 
 // @route GET /api/products
-// @desc Get all products
+// @desc Get all products with query filters and pagination
 // @access Public
 router.get('/', getAllProducts);
 
