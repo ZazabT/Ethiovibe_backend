@@ -117,6 +117,7 @@ exports.getAllProducts = async (req, res) => {
         query.colors = { $in: colors.split(',') };
     }
     if (minPrice || maxPrice) {
+        query.price = {};
         if (minPrice) {
             query.price.$gte = Number(minPrice);
         }
@@ -175,7 +176,7 @@ exports.getAllProducts = async (req, res) => {
     // fetch the producst and limit
 
     try {
-        const products = await Product.find(query)
+        const products = await Product.find(query , {isDeleted: false, isPublished: true})
             .sort(sortOptions)
             .limit(limit || 0);
 
@@ -202,7 +203,7 @@ exports.getProductById = async (req, res) => {
     // try to get the product if exist
     try {
         // check if product exist
-        const product = await Product.findOne(id);
+        const product = await Product.findById(id);
 
         if (!product) {
             return res.status(404).json({ error: 'Product not found' });
@@ -265,13 +266,41 @@ exports.getSimilarProducts = async (req, res) => {
 }
 
 
+// Get 4 other products like hats, vest etc
+exports.getOtherProducts = async (req, res) => {
+
+    // try to get the other products
+    try {
+
+        const otherProducts = await Product.find({
+            isDeleted: false,
+            isPublished: true,
+            category: 'other'
+        }).limit(4);
+
+        if (!otherProducts) {
+            return res.status(404).json({ error: 'No other products found' });
+        }
+
+        return res.status(200).json({
+            msg: 'Other products fetched successfully',
+            otherProducts
+        })
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({
+            error: 'Server Error',
+            msg: error.message || 'An unexpected error occurred',
+        });
+    }
+}
 // Get all deleted products
 exports.getBestSellingProducts = async (req, res) => {
 
     // try to get the best selling product
     try {
 
-        const bestSellingProduct = await Product.findOne().sort({ rating: -1 });
+        const bestSellingProduct = await Product.findOne({isDeleted: false, isPublished: true}).sort({ rating: -1 });
         if (!bestSellingProduct) {
             return res.status(404).json({ error: 'No best selling product found' });
         }
@@ -292,7 +321,7 @@ exports.getBestSellingProducts = async (req, res) => {
 exports.getNewArrivalsProducts = async (req, res) => {
     // try to get the new arrivals product
     try {
-        const newArrivalsProduct = await Product.find().sort({ createdAt:-1 }).limit(8);
+        const newArrivalsProduct = await Product.find({isDeleted: false, isPublished: true}).sort({ createdAt: -1 }).limit(8);
         if (!newArrivalsProduct) {
             return res.status(404).json({ error: 'No new arrivals product found' });
         }
