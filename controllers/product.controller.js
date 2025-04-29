@@ -225,6 +225,87 @@ exports.getProductById = async (req, res) => {
 }
 
 
+// Get similar products by ID
+exports.getSimilarProducts = async (req, res) => {
+
+    // get the product id from params
+    const { id } = req.params;
+
+    // try to get the product if exist
+    try {
+
+        // check if product exist
+        const product = await Product.findById(id);
+
+        if (!product) {
+            return res.status(404).json({ error: 'Product not found' });
+        }
+
+        // get 4 similar products
+        const similarProducts = await Product.find({
+            _id: { $ne: product._id }, // Exclude the current product
+            gender: product.gender,
+            material: product.material,
+        }).limit(8);
+
+        return res.status(200).json({
+            msg: 'Similar products fetched successfully',
+            similarProducts
+        });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({
+            error: 'Server Error',
+            msg: error.message || 'An unexpected error occurred',
+        });
+    }
+}
+
+
+// Get all deleted products
+exports.getBestSellingProducts = async (req, res) => {
+
+    // try to get the best selling product
+    try {
+
+        const bestSellingProduct = await Product.findOne().sort({ rating: -1 });
+        if (!bestSellingProduct) {
+            return res.status(404).json({ error: 'No best selling product found' });
+        }
+        return res.status(200).json({
+            msg: 'Best selling product fetched successfully',
+            bestSellingProduct
+        })
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({
+            error: 'Server Error',
+            msg: error.message || 'An unexpected error occurred',
+        });
+    }
+}
+
+// Get New Arrivals Products
+exports.getNewArrivalsProducts = async (req, res) => {
+    // try to get the new arrivals product
+    try {
+        const newArrivalsProduct = await Product.find().sort({ createdAt:-1 }).limit(8);
+        if (!newArrivalsProduct) {
+            return res.status(404).json({ error: 'No new arrivals product found' });
+        }
+
+        return res.status(200).json({
+            msg: 'New arrivals product fetched successfully',
+            newArrivalsProduct
+        })
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({
+            error: 'Server Error',
+            msg: error.message || 'An unexpected error occurred',
+        });
+    }
+}
 // Update a product by ID
 exports.updateProduct = async (req, res) => {
 

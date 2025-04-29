@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Product = require('../models/Product.model');
 const {protect , admin} = require('../middleware/auth.middleware');
-const {createProduct ,getAllProducts ,getProductById ,updateProduct ,deleteProduct} = require('../controllers/product.controller');
+const {createProduct ,getAllProducts ,getProductById ,updateProduct ,deleteProduct , getSimilarProducts ,getBestSellingProducts} = require('../controllers/product.controller');
 const {createProductValidator , updateProductValidator} = require('../validators/product.validator');
 
 // @route GET /api/products
@@ -15,6 +15,18 @@ router.get('/', getAllProducts);
 // @desc Get a single product by ID
 // @access Public
 router.get('/:id', getProductById);
+
+
+// @route GET /api/products/similar/:id
+// @desc Get similar products by ID
+// @access Public
+router.get('/similar/:id', getSimilarProducts);
+
+
+// @route GET /api/products/best-selling
+// @desc Get the best-selling products
+// @access Public
+router.get('/best-selling', getBestSellingProducts);
 
 
 // @route POST /api/products
