@@ -1,8 +1,8 @@
 const { body } = require('express-validator');
 
 
-// Product validation
-exports.productValidator = [
+// Product create validation
+exports.createProductValidator = [
     // Name
     body('name')
         .trim()
@@ -168,13 +168,6 @@ exports.productValidator = [
             return true;
         }),
 
-    // User
-    body('user')
-        .notEmpty()
-        .withMessage('User is required')
-        .isMongoId()
-        .withMessage('User must be a valid MongoDB ObjectId'),
-
     // Meta Fields
     body('metaTitle')
         .optional()
@@ -217,6 +210,158 @@ exports.productValidator = [
         .optional()
         .isIn(['cotton', 'polyester', 'wool', 'denim', 'leather', 'silk', 'other'])
         .withMessage('Material must be one of: cotton, polyester, wool, denim, leather, silk, other'),
+];
+
+
+// Product update validation
+exports.updateProductValidator = [
+    body('name')
+      .optional()
+      .trim()
+      .isLength({ min: 2, max: 100 })
+      .withMessage('Name must be between 2 and 100 characters'),
+  
+    body('description')
+      .optional()
+      .trim()
+      .isLength({ min: 10, max: 2000 })
+      .withMessage('Description must be between 10 and 2000 characters'),
+  
+    body('price')
+      .optional()
+      .isFloat({ min: 0 })
+      .withMessage('Price must be a number >= 0'),
+  
+    body('discountPercentage')
+      .optional()
+      .isFloat({ min: 0, max: 100 })
+      .withMessage('Discount percentage must be between 0 and 100'),
+  
+    body('countInStock')
+      .optional()
+      .isInt({ min: 0 })
+      .withMessage('Count in stock must be an integer >= 0'),
+  
+    body('stockStatus')
+      .optional()
+      .isIn(['IN_STOCK', 'OUT_OF_STOCK', 'LOW_STOCK'])
+      .withMessage('Invalid stock status'),
+  
+    body('sku')
+      .optional()
+      .trim()
+      .isLength({ min: 5, max: 50 })
+      .withMessage('SKU must be between 5 and 50 characters'),
+  
+    body('sizes')
+      .optional()
+      .isArray()
+      .withMessage('Sizes must be an array')
+      .custom((sizes) => {
+        for (const size of sizes) {
+          if (!['XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL'].includes(size)) {
+            throw new Error('Invalid size value');
+          }
+        }
+        return true;
+      }),
+  
+    body('colors')
+      .optional()
+      .isArray()
+      .withMessage('Colors must be an array')
+      .custom((colors) => {
+        for (const color of colors) {
+          if (typeof color !== 'string' || !color.trim()) {
+            throw new Error('Each color must be a non-empty string');
+          }
+        }
+        return true;
+      }),
+  
+    body('images')
+      .optional()
+      .isArray()
+      .withMessage('Images must be an array')
+      .custom((images) => {
+        for (const image of images) {
+          if (typeof image.url !== 'string') {
+            throw new Error('Each image must have a valid "url"');
+          }
+          if ('isPrimary' in image && typeof image.isPrimary !== 'boolean') {
+            throw new Error('"isPrimary" must be a boolean');
+          }
+          if ('altText' in image && typeof image.altText !== 'string') {
+            throw new Error('"altText" must be a string');
+          }
+        }
+        return true;
+      }),
+  
+    body('gender')
+      .optional()
+      .isIn(['male', 'female', 'unisex'])
+      .withMessage('Gender must be one of: male, female, unisex'),
+  
+    body('isFeatured').optional().isBoolean(),
+    body('isDeleted').optional().isBoolean(),
+    body('isPublished').optional().isBoolean(),
+  
+    body('ratings').optional().isFloat({ min: 0, max: 5 }),
+    body('numReviews').optional().isInt({ min: 0 }),
+  
+    body('tags')
+      .optional()
+      .isArray()
+      .withMessage('Tags must be an array of strings')
+      .custom((tags) => {
+        for (const tag of tags) {
+          if (typeof tag !== 'string') {
+            throw new Error('Each tag must be a string');
+          }
+        }
+        return true;
+      }),
+  
+    body('metaTitle')
+      .optional()
+      .isLength({ max: 100 })
+      .withMessage('Meta title must be under 100 characters'),
+  
+    body('metaDescription')
+      .optional()
+      .isLength({ max: 160 })
+      .withMessage('Meta description must be under 160 characters'),
+  
+    body('metaKeywords')
+      .optional()
+      .isLength({ max: 200 })
+      .withMessage('Meta keywords must be under 200 characters'),
+  
+    body('dimensions.length')
+      .optional()
+      .isFloat({ min: 0 })
+      .withMessage('Length must be >= 0'),
+  
+    body('dimensions.width')
+      .optional()
+      .isFloat({ min: 0 })
+      .withMessage('Width must be >= 0'),
+  
+    body('dimensions.height')
+      .optional()
+      .isFloat({ min: 0 })
+      .withMessage('Height must be >= 0'),
+  
+    body('weight')
+      .optional()
+      .isFloat({ min: 0 })
+      .withMessage('Weight must be >= 0'),
+  
+    body('material')
+      .optional()
+      .isIn(['cotton', 'polyester', 'wool', 'denim', 'leather', 'silk', 'other'])
+      .withMessage('Invalid material type'),
 ];
 
 // exports.validate = (req, res, next) => {

@@ -25,9 +25,6 @@ app.use('/api/products', productRoute);
 
 const PORT = process.env.PORT || 3000;
 
-app.get("/", (req, res) => {
-    res.send('WELCOME TO ETHIOVIBE');
-});
 
 // Start server
 const startServer = async () => {
