@@ -246,6 +246,63 @@ exports.getCart = async (req, res) => {
 
 // Merge guest cart to user cart
 
-exports.mergeCart = async (req , res) =>{
-    
-}
+exports.mergeCart = async (req, res) => {
+    const { guestId } = req.body;
+
+    try {
+        const guestCart = await Cart.findOne({ guestId });
+        const userCart = await Cart.findOne({ user: req.user._id });
+
+        if (!guestCart) {
+            return res.status(404).json({ message: 'Guest cart not found' });
+        }
+
+        if (userCart) {
+            // Merge guest cart items into user cart
+            guestCart.products.forEach(guestItem => {
+                const existingItem = userCart.products.find(userItem =>
+                    userItem.productId.toString() === guestItem.productId.toString() &&
+                    userItem.size === guestItem.size &&
+                    userItem.color === guestItem.color
+                );
+
+                if (existingItem) {
+                    existingItem.quantity += guestItem.quantity;
+                } else {
+                    userCart.products.push(guestItem);
+                }
+            });
+
+            // Recalculate total price
+            userCart.totalPrice = userCart.products.reduce(
+                (sum, item) => sum + item.price * item.quantity,
+                0
+            );
+
+            await userCart.save();
+            await guestCart.deleteOne();
+
+            return res.status(200).json(userCart);
+        } else {
+            // No existing user cart — transfer guest cart
+            guestCart.user = req.user._id;
+            guestCart.guestId = undefined;
+            await guestCart.save();
+
+            return res.status(200).json(guestCart);
+        }
+
+    } catch (error) {
+        console.error('💥 mergeCart error:', {
+            message: error.message,
+            stack: error.stack,
+            context: { guestId, userId: req.user?._id }
+        });
+
+        return res.status(500).json({
+            error: 'Server Error',
+            msg: error.message || 'An unexpected error occurred',
+        });
+    }
+};
+

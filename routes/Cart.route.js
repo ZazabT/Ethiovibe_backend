@@ -1,4 +1,5 @@
 const express = require('express');
+const {protect} = require('../middleware/auth.middleware');
 const router = express.Router();
 const {addToCart ,getCart ,updateQuantity ,deleteCartitem ,mergeCart} = require('../controllers/Cart.controller')
 
@@ -32,6 +33,6 @@ router.get('/', getCart);
 
 // @route POST /api/cart/merge
 // @desc merge the guest cart to the user cart
-// @access Public
-router.post('/merge' , mergeCart)
+// @access privet
+router.post('/merge' , protect ,mergeCart)
 module.exports = router;
