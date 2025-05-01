@@ -280,6 +280,8 @@ exports.mergeCart = async (req, res) => {
             );
 
             await userCart.save();
+            
+            // delete guest cart after merging
             await guestCart.deleteOne();
 
             return res.status(200).json(userCart);
