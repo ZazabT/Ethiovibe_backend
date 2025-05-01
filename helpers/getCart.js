@@ -1,6 +1,4 @@
-
 const Cart = require('../models/Cart.model');
-const CartItem = require('../models/CartItem.model');
 exports.getCart = async (userId, guestId) => {
 
     if (userId) {
