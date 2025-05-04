@@ -1,11 +1,17 @@
 const Cart = require('../models/Cart.model');
 const Product = require('../models/Product.model');
 const { getCart } = require('../helpers/getCart');
+const { validationResult } = require('express-validator');
 
 // Add a product to the cart
 exports.addToCart = async (req, res) => {
+     // Check validation errors
+     const errors = validationResult(req);
+     if (!errors.isEmpty()) {
+         return res.status(400).json({ error: errors.array() });
+     }
     const { productId, quantity, size, color, guestId, userId } = req.body;
-
+    
     try {
 
         // 1. Find the product by ID
@@ -58,7 +64,10 @@ exports.addToCart = async (req, res) => {
 
             await cart.save();
 
-            return res.status(200).json(cart);
+            return res.status(200).json({ 
+                msg: 'Product successfully added to cart',
+                cart 
+            });
         }
 
         // 5. If no cart exists, create one
@@ -78,7 +87,10 @@ exports.addToCart = async (req, res) => {
         });
 
         await newCart.save();
-        return res.status(200).json(newCart);
+        return res.status(200).json({ 
+            msg: 'New cart created with product',
+            cart: newCart 
+        });
 
     } catch (error) {
         console.error('💥 Cart error:', {
@@ -99,6 +111,12 @@ exports.addToCart = async (req, res) => {
 
 // Update cart
 exports.updateQuantity = async (req, res) => {
+     // Check validation errors
+     const errors = validationResult(req);
+     if (!errors.isEmpty()) {
+         return res.status(400).json({ error: errors.array() });
+     }
+     
     const { productId, quantity, size, color, guestId, userId } = req.body;
 
     try {
@@ -142,7 +160,10 @@ exports.updateQuantity = async (req, res) => {
 
         await cart.save();
 
-        return res.status(200).json(cart);
+        return res.status(200).json({ 
+            msg: 'Cart quantity updated successfully',
+            cart 
+        });
 
     } catch (error) {
         console.error('💥 updateQuantity error:', {
@@ -192,7 +213,10 @@ exports.deleteCartitem = async (req, res) => {
 
         await cart.save();
 
-        return res.status(200).json({msg:"CartItem Deleted successfully" , cart});
+        return res.status(200).json({
+            msg: "Item successfully removed from cart",
+            cart
+        });
 
     } catch (error) {
         console.error('💥 deleteCartitem error:', {
@@ -222,7 +246,11 @@ exports.getCart = async (req, res) => {
             return res.status(404).json({ message: 'Cart not found' });
         }
 
-        return res.status(200).json(cart);
+        return res.status(200).json({
+            msg: "Cart fetched successfully",
+            cart
+        });
+        
 
     } catch (error) {
         console.error('💥 deleteCartitem error:', {
@@ -278,14 +306,20 @@ exports.mergeCart = async (req, res) => {
             // delete guest cart after merging
             await guestCart.deleteOne();
 
-            return res.status(200).json(userCart);
+            return res.status(200).json({ 
+                msg: 'Guest cart successfully merged with user cart',
+                cart: userCart
+            });
         } else {
             // No existing user cart — transfer guest cart
             guestCart.user = req.user._id;
             guestCart.guestId = undefined;
             await guestCart.save();
 
-            return res.status(200).json(guestCart);
+            return res.status(200).json({ 
+                msg: 'Guest cart successfully transferred to user account',
+                cart: guestCart
+            });
         }
 
     } catch (error) {
