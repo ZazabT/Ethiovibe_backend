@@ -7,9 +7,6 @@ exports.addToCart = async (req, res) => {
     const { productId, quantity, size, color, guestId, userId } = req.body;
 
     try {
-        if (!productId || !quantity || !size || !color) {
-            return res.status(400).json({ message: 'Missing required fields' });
-        }
 
         // 1. Find the product by ID
         const product = await Product.findById(productId);
@@ -105,9 +102,6 @@ exports.updateQuantity = async (req, res) => {
     const { productId, quantity, size, color, guestId, userId } = req.body;
 
     try {
-        if (!productId || !size || !color || quantity == null) {
-            return res.status(400).json({ message: 'Missing required fields' });
-        }
 
         // 1. Validate quantity
         if (quantity < 1) {
@@ -198,7 +192,7 @@ exports.deleteCartitem = async (req, res) => {
 
         await cart.save();
 
-        return res.status(200).json(cart);
+        return res.status(200).json({msg:"CartItem Deleted successfully" , cart});
 
     } catch (error) {
         console.error('💥 deleteCartitem error:', {
@@ -254,7 +248,7 @@ exports.mergeCart = async (req, res) => {
         const userCart = await Cart.findOne({ user: req.user._id });
 
         if (!guestCart) {
-            return res.status(404).json({ message: 'Guest cart not found' });
+            return res.status(404).json({ message: 'Guest cart is empty' });
         }
 
         if (userCart) {

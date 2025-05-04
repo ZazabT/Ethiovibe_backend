@@ -78,6 +78,8 @@ exports.createProduct = async (req, res) => {
 
 
 
+
+
 // Get all products
 exports.getAllProducts = async (req, res) => {
 

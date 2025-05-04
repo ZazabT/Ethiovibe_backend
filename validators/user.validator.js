@@ -47,4 +47,5 @@ exports.logValidation =[
     .notEmpty()
     .withMessage('Password is required')
     .isLength({ min: 8 })
+    
 ]
