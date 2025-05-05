@@ -57,7 +57,8 @@ const checkoutSchema = new mongoose.Schema({
     country :{
         enum : ['Ethiopia','Kenya','Eritrea','Djibouti','Somalia','Sudan'],
         type : String,
-        required : true
+        required : true,
+        default : 'Ethiopia'
     },
 
     postalCode: {
@@ -67,7 +68,7 @@ const checkoutSchema = new mongoose.Schema({
 
     paymentMethod : {
         type : String,
-        required : true
+        required : true,
     },
     
     totalPrice : {
@@ -92,7 +93,6 @@ const checkoutSchema = new mongoose.Schema({
 
     paymentDetail : {
         type : mongoose.Schema.Types.Mixed,
-
     },
 
     isFinalized : {
