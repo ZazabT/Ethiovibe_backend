@@ -8,3 +8,7 @@ const {protect} = require('../middleware/auth.middleware');
 // @access Privet
 
 router.get('my-order', protect, getMyOrder);
+
+
+
+module.exports = router;
