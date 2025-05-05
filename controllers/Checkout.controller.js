@@ -30,7 +30,6 @@ exports.createCheckout = async ( req , res) => {
         console.error('💥 Creating Checkout error:', {
             message: error.message,
             stack: error.stack,
-            context: { productId, userId, guestId }
         });
 
         return res.status(500).json({
@@ -75,7 +74,7 @@ exports.checkoutPayed = async (req, res) => {
         console.error('💥 PayCheckout error:', {
             message: error.message,
             stack: error.stack,
-            context: { productId, userId, guestId }
+            
         });
 
         return res.status(500).json({
@@ -135,7 +134,7 @@ exports.finalizeCheckout = async (req, res) => {
         console.error('💥 FinalizeCheckout error:', {
             message: error.message,
             stack: error.stack,
-            context: { productId, userId, guestId }
+           
         });
 
         return res.status(500).json({
