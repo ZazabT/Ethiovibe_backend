@@ -11,6 +11,7 @@ const productRoute = require('./routes/product.route');
 const cartRoute = require('./routes/Cart.route');
 const checkoutRoute = require('./routes/Checkout.route');
 const orderRoute = require('./routes/Order.route');
+const subscriberRoute = require('./routes/Subscriber.route');
 const app = express();
 
 // Middlewares
@@ -24,9 +25,10 @@ app.use(morgan('dev'));
 // api routes
 app.use('/api/users', userRoute);
 app.use('/api/products', productRoute);
-app.use('/api/cart', cartRoute);
-app.use('/api/checkout', checkoutRoute);
+app.use('/api/carts', cartRoute);
+app.use('/api/checkouts', checkoutRoute);
 app.use('/api/orders', orderRoute);
+app.use('/api/subscribers', subscriberRoute);
 
 const PORT = process.env.PORT || 3000;
 
