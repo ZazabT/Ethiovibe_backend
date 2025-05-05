@@ -29,7 +29,9 @@ const checkoutItemSchema = new mongoose.Schema({
         type : Number,
         required : true
      },
-});
+},
+{_id : false}
+);
 
 // Create a Mongoose schema for the Checkout model
 
