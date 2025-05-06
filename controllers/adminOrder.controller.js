@@ -26,7 +26,7 @@ exports.updateOrder = async ( req , res )=>{
     const { id } = req.params;
 
     // get data from req.body
-    const { status } = req.body;
+    const { deliveryStatus } = req.body;
     // check if order exists
     const order = await Order.findById(id);
 
@@ -38,10 +38,10 @@ exports.updateOrder = async ( req , res )=>{
 
     try {
         // update order
-        order.deliveryStatus = status;
+        order.deliveryStatus = deliveryStatus;
 
         // update isDelivered and deliveredAt
-        if (status === 'DELIVERED') {
+        if (deliveryStatus === 'DELIVERED') {
             order.isDelivered = true;
             order.deliveredAt = Date.now();
         }
