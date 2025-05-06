@@ -1,0 +1,29 @@
+# Node modules (should never be committed)
+node_modules/
+
+# Environment variables
+.env
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+*.log
+
+# Optional OS-specific files
+.DS_Store
+Thumbs.db
+
+# IDE/editor-specific files
+.vscode/
+.idea/
+
+# Build artifacts (optional, if you're building stuff)
+dist/
+build/
+coverage/
+
+# System file locks (for some OSes or editors)
+*.swp
+*.swo
