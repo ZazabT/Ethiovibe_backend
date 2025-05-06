@@ -14,6 +14,8 @@ const orderRoute = require('./routes/Order.route');
 const subscriberRoute = require('./routes/Subscriber.route');
 const uploadRoute  = require('./routes/Upload.route');
 const adminUserRoute = require('./routes/adminUser.route');
+const adminProductRoute = require('./routes/adminProduct.route');
+const adminOrderRoute = require('./routes/adminOrder.route');
 
 
 const app = express();
@@ -34,9 +36,10 @@ app.use('/api/checkouts', checkoutRoute);
 app.use('/api/orders', orderRoute);
 app.use('/api/subscribers', subscriberRoute);
 app.use('/api/upload', uploadRoute);
-app.use('/api/admin/products' , adminUserRoute);
+app.use('/api/admin/products' , adminProductRoute);
 app.use('/api/admin/users' , adminUserRoute);
-app.use('/api/admin/orders' , adminUserRoute);
+app.use('/api/admin/orders' , adminOrderRoute);
+
 
 const PORT = process.env.PORT || 3000;
 
