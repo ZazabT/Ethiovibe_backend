@@ -22,6 +22,45 @@ exports.getAllOrders = async ( req , res )=>{
 
 exports.updateOrder = async ( req , res )=>{
 
+    // get order id from req.params
+    const { id } = req.params;
+
+    // get data from req.body
+    const { status } = req.body;
+    // check if order exists
+    const order = await Order.findById(id);
+
+    if (!order) {
+        return res.status(404).json({
+            msg: 'Order not found'
+        })
+    }
+
+    try {
+        // update order
+        order.deliveryStatus = status;
+
+        // update isDelivered and deliveredAt
+        if (status === 'DELIVERED') {
+            order.isDelivered = true;
+            order.deliveredAt = Date.now();
+        }
+
+        // save order
+        await order.save();
+
+        res.status(200).json({
+            msg: 'Order status updated successfully',
+            order 
+        });
+    } catch (error) {
+        
+        console.error("Admin update Order error:", error);
+        res.status(500).json({
+            message: 'Error updating order status',
+            error: error.message
+        });
+    }
 }
 
 
