@@ -3,7 +3,7 @@ const router = express.Router();
 const multer = require('multer');
 const cloudinary = require('cloudinary').v2;
 const streamifier = require('streamifier');
-
+const { admin , protect } = require('../middleware/auth.middleware')
 
 require('dotenv').config();
 
@@ -24,7 +24,7 @@ const upload = multer({storage});
 // @desc upload product images to cloudinary
 // @access privet
 
-router.post('/' ,upload.array('images', 5), async (req ,res) =>{
+router.post('/', admin , protect ,upload.array('images', 5), async (req ,res) =>{
     try {
         if(!req.files || req.files.length === 0){ // Check req.files and its length
          return res.status(400).json({message : 'No files to upload'})
