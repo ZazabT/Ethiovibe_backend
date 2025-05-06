@@ -1,7 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const { admin , protect } = require('../middleware/auth.middleware');
-const { createUser ,deleteUser ,getAllUsers ,updateUser} = require('../controllers/Admin.controller')
+const { createUser ,deleteUser ,getAllUsers ,updateUser} = require('../controllers/Admin.controller');
+const { registerValidation } = require('../validators/user.validator')
 
 // @route GET /api/admin/users
 // @desc Get all users (admin only)
@@ -12,7 +13,7 @@ router.get('/' , admin , protect , getAllUsers);
 // @route POST /api/admin/users
 // @desc Create a new user (admin only)
 // @access Private (Admin)
-router.post('/' , admin , protect , createUser);
+router.post('/' , admin , protect , createUser , registerValidation);
 
 
 // @route PUT /api/admin/users/:id
