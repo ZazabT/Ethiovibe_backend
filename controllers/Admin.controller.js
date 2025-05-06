@@ -30,7 +30,7 @@ exports.createUser = async (req, res) => {
     }
 
     // Get data from body
-    const { name, email, password } = req.body;
+    const { name, email, password  , role='customer'} = req.body;
 
     try {
         // Check if user already exists
@@ -45,7 +45,8 @@ exports.createUser = async (req, res) => {
         const user = new User({
             name,
             email,
-            password
+            password,
+            role
         });
 
         // Save user to database
