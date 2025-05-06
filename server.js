@@ -12,6 +12,9 @@ const cartRoute = require('./routes/Cart.route');
 const checkoutRoute = require('./routes/Checkout.route');
 const orderRoute = require('./routes/Order.route');
 const subscriberRoute = require('./routes/Subscriber.route');
+const uploadRoute  = require('./routes/Upload.route');
+
+
 const app = express();
 
 // Middlewares
@@ -29,6 +32,7 @@ app.use('/api/carts', cartRoute);
 app.use('/api/checkouts', checkoutRoute);
 app.use('/api/orders', orderRoute);
 app.use('/api/subscribers', subscriberRoute);
+app.use('/api/upload', uploadRoute);
 
 const PORT = process.env.PORT || 3000;
 
