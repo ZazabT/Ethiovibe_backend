@@ -6,22 +6,27 @@ const { createUser ,deleteUser ,getAllUsers ,updateUser} = require('../controlle
 // @route GET /api/admin/users
 // @desc Get all users (admin only)
 // @access Private (Admin)
-router.get('/users' , admin , protect , getAllUsers);
+router.get('/' , admin , protect , getAllUsers);
 
 
 // @route POST /api/admin/users
 // @desc Create a new user (admin only)
 // @access Private (Admin)
-router.post('/users' , admin , protect , createUser);
+router.post('/' , admin , protect , createUser);
 
 
 // @route PUT /api/admin/users/:id
 // @desc Update a user (admin only)
 // @access Private (Admin)
-router.put('/users/:id' , admin , protect , updateUser);
+router.put('/:id' , admin , protect , updateUser);
 
 
 // @route DELETE /api/admin/users/:id
 // @desc Delete a user (admin only)
 // @access Private (Admin)
-router.delete('/users/:id' , admin , protect , deleteUser);
+router.delete('/:id' , admin , protect , deleteUser);
+
+
+
+
+module.exports = router;
