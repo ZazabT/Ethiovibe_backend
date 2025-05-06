@@ -1,14 +1,14 @@
 const express = require('express');
 const router = express.Router();
-const {protect} = require('../middleware/auth.middleware');
-const {subscribe, getAllsubscribers} = require('../controllers/Order.controller');
+const {protect , admin} = require('../middleware/auth.middleware');
+const { getAllSubscribers , subscribe} = require('../controllers/Subscriber.controller')
 
 
 // @route GET /api/subscribe/
 // @desc get all subscribers
 // @access Privet
 
-router.get('/', protect, getAllsubscribers);
+router.get('/', protect, admin ,getAllSubscribers);
 
 
 // @route POST /api/subscribe/
@@ -16,3 +16,7 @@ router.get('/', protect, getAllsubscribers);
 // @access public
 
 router.post('/', subscribe);
+
+
+
+module.exports = router;

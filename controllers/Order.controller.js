@@ -4,7 +4,7 @@ const Order = require('../models/Order.model');
 
 
 
-exports.getMyOrder = async (req, res) => {
+exports.getMyOrders = async (req, res) => {
 
     try {
         // find all order of the user
