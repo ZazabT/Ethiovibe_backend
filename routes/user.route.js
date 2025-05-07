@@ -28,3 +28,6 @@ route.get('/profile' , protect , getProfile );
 
 // export the route
 module.exports = route;
+
+
+

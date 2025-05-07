@@ -278,7 +278,7 @@ exports.getOtherProducts = async (req, res) => {
             isDeleted: false,
             isPublished: true,
             category: 'other'
-        }).limit(4);
+        }).limit(4).sort({ createdAt: -1 });
 
         if (!otherProducts) {
             return res.status(404).json({ error: 'No other products found' });
