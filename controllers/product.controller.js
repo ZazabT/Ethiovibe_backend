@@ -303,9 +303,7 @@ exports.getBestSellingProducts = async (req, res) => {
     try {
 
         const bestSellingProduct = await Product.findOne({ isDeleted: false, isPublished: true }).sort({ rating: -1 });
-        if (!bestSellingProduct) {
-            return res.status(404).json({ error: 'No best selling product found' });
-        }
+        
         return res.status(200).json({
             msg: 'Best selling product fetched successfully',
             bestSellingProduct
@@ -324,9 +322,6 @@ exports.getNewArrivalsProducts = async (req, res) => {
     // try to get the new arrivals product
     try {
         const newArrivalsProduct = await Product.find({ isDeleted: false, isPublished: true }).sort({ createdAt: -1 }).limit(8);
-        if (!newArrivalsProduct) {
-            return res.status(404).json({ error: 'No new arrivals product found' });
-        }
 
         return res.status(200).json({
             msg: 'New arrivals product fetched successfully',
