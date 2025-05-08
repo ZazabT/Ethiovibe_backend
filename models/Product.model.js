@@ -54,6 +54,12 @@ const productSchema = new mongoose.Schema(
       colors: {
         type: [String],
         required: true,
+        enum: [
+          'black', 'white', 'navy', 'blue', 'red', 'green', 'pink', 'gray', 'khaki',
+          'brown', 'aqua', 'coral', 'yellow', 'purple', 'teal', 'orange', 'maroon',
+          'lime', 'fuchsia', 'olive', 'silver', 'gold', 'violet', 'indigo', 'cyan',
+          'magenta', 'salmon', 'turquoise', 'orchid', 'plum'
+        ],
       },
       images: [
         {
