@@ -5,6 +5,19 @@ const connectDB = require('./config/db');
 const helmet = require('helmet');
 const morgan = require('morgan');
 
+// CORS Configuration
+const corsOptions = {
+    origin: [
+        'http://localhost:3000',
+        'http://localhost:5173',  // Vite's default port
+        'ehiovibe.vercel.app' 
+    ],
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+    credentials: true,
+    optionsSuccessStatus: 200
+};
+
+const app = express();
 // Routes
 const userRoute = require('./routes/user.route');
 const productRoute = require('./routes/product.route');
@@ -17,13 +30,10 @@ const adminUserRoute = require('./routes/adminUser.route');
 const adminProductRoute = require('./routes/adminProduct.route');
 const adminOrderRoute = require('./routes/adminOrder.route');
 
-
-const app = express();
-
 // Middlewares
 app.use(helmet()); // Adds security headers to responses
 app.use(express.json());
-app.use(cors());
+app.use(cors(corsOptions)); // Apply CORS with options
 
 // Use Morgan for logging requests in the development environment
 app.use(morgan('dev'));
