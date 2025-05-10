@@ -240,9 +240,6 @@ exports.getSimilarProducts = async (req, res) => {
         // check if product exist
         const product = await Product.findById(id);
 
-        if (!product) {
-            return res.status(404).json({ error: 'Product not found' });
-        }
 
         // get 4 similar products
         const similarProducts = await Product.find({
@@ -280,9 +277,6 @@ exports.getOtherProducts = async (req, res) => {
             category: 'other'
         }).limit(4).sort({ createdAt: -1 });
 
-        if (!otherProducts) {
-            return res.status(404).json({ error: 'No other products found' });
-        }
 
         return res.status(200).json({
             msg: 'Other products fetched successfully',
@@ -302,7 +296,17 @@ exports.getBestSellingProducts = async (req, res) => {
     // try to get the best selling product
     try {
 
-        const bestSellingProduct = await Product.findOne({ isDeleted: false, isPublished: true }).sort({ rating: -1 });
+        const bestSellingProduct = await Product.findOne({ 
+            isDeleted: false, 
+            isPublished: true,
+            ratings: { $gt: 0 }, // Only consider products with ratings
+            numReviews: { $gt: 0 } // Only consider products with reviews
+        })
+        .sort({ 
+            ratings: -1, // Higher ratings first
+            numReviews: -1, // More reviews second
+            createdAt: -1 // Newer products third
+        });
         
         return res.status(200).json({
             msg: 'Best selling product fetched successfully',
