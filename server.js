@@ -35,6 +35,7 @@ app.use(helmet()); // Adds security headers to responses
 app.use(express.json());
 app.use(cors(corsOptions)); // Apply CORS with options
 
+
 // Use Morgan for logging requests in the development environment
 app.use(morgan('dev'));
 
