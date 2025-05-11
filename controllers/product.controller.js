@@ -77,15 +77,11 @@ exports.createProduct = async (req, res) => {
 }
 
 
-
-
-
 // Get all products
 exports.getAllProducts = async (req, res) => {
-
-    // get all query
     const {
-        collections,
+        collection,
+        category,
         gender,
         material,
         sizes,
@@ -97,18 +93,17 @@ exports.getAllProducts = async (req, res) => {
         search
     } = req.query;
 
-    // get the query object
     const query = {};
 
-    //Filter logic
-    if (collections && collections.toLowerCase() === 'all') {
-        query.collections = collections;
+    if (collection && collection.toLowerCase() !== 'all') {
+        query.collection = collection;
     }
-
-    if (gender && gender.toLowerCase() === 'all') {
+    if (gender && gender.toLowerCase() !== 'all') {
         query.gender = gender;
     }
-
+    if (category && category.toLowerCase() !== 'all') {
+        query.category = category;
+    }
     if (material) {
         query.material = { $in: material.split(',') };
     }
@@ -120,72 +115,42 @@ exports.getAllProducts = async (req, res) => {
     }
     if (minPrice || maxPrice) {
         query.price = {};
-        if (minPrice) {
-            query.price.$gte = Number(minPrice);
-        }
-        if (maxPrice) {
-            query.price.$lte = Number(maxPrice);
-        }
+        if (minPrice) query.price.$gte = Number(minPrice);
+        if (maxPrice) query.price.$lte = Number(maxPrice);
     }
     if (search) {
         query.$or = [
             { name: { $regex: search, $options: 'i' } },
-            { description: { $regex: search, $options: 'i' } },
+            { description: { $regex: search, $options: 'i' } }
         ];
     }
 
-    // Sorting logic
     const sortOptions = {};
-
-    if (sortBy) {
-        switch (sortBy) {
-            case 'price-asc':
-                sortOptions.price = 1;
-                break;
-            case 'price-desc':
-                sortOptions.price = -1;
-                break;
-            case 'name-asc':
-                sortOptions.name = 1;
-                break;
-            case 'name-desc':
-                sortOptions.name = -1;
-                break;
-            case 'createdAt-asc':
-                sortOptions.createdAt = 1;
-                break;
-            case 'createdAt-desc':
-                sortOptions.createdAt = -1;
-                break;
-            case 'price-desc':
-                sortOptions.price = -1;
-                break;
-            case 'price-asc':
-                sortOptions.price = 1;
-                break;
-            case 'popularity-desc':
-                sortOptions.popularity = -1;
-                break;
-            case 'popularity-asc':
-                sortOptions.popularity = 1;
-                break;
-
-            default:
-                break;
-        }
+    switch (sortBy) {
+        case 'price-asc': sortOptions.price = 1; break;
+        case 'price-desc': sortOptions.price = -1; break;
+        case 'name-asc': sortOptions.name = 1; break;
+        case 'name-desc': sortOptions.name = -1; break;
+        case 'createdAt-asc': sortOptions.createdAt = 1; break;
+        case 'createdAt-desc': sortOptions.createdAt = -1; break;
+        case 'popularity-asc': sortOptions.popularity = 1; break;
+        case 'popularity-desc': sortOptions.popularity = -1; break;
+        default: break;
     }
 
-    // fetch the producst and limit
-
     try {
-        const products = await Product.find(query, { isDeleted: false, isPublished: true })
+        const products = await Product.find({
+            ...query,
+            isDeleted: false,
+            isPublished: true
+        })
             .sort(sortOptions)
-            .limit(limit || 0);
+            .limit(Number(limit) || 0);
 
         return res.status(200).json({
             msg: 'Products fetched successfully',
             products
-        })
+        });
     } catch (error) {
         console.error(error);
         return res.status(500).json({
@@ -193,7 +158,8 @@ exports.getAllProducts = async (req, res) => {
             msg: error.message || 'An unexpected error occurred',
         });
     }
-}
+};
+
 
 
 // Get a single product by ID
