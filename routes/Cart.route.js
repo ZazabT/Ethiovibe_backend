@@ -1,17 +1,17 @@
 const express = require('express');
 const { protect } = require('../middleware/auth.middleware');
 const router = express.Router();
-const { 
-    addToCart, 
-    getCart, 
-    updateQuantity, 
-    deleteCartitem, 
-    mergeCart 
+const {
+    addToCart,
+    getCart,
+    updateQuantity,
+    deleteCartitem,
+    mergeCart
 } = require('../controllers/Cart.controller');
-const { 
-    addToCartValidation, 
-    updateCartValidation, 
-    deleteCartValidation 
+const {
+    addToCartValidation,
+    updateCartValidation,
+    deleteCartValidation
 } = require('../validators/cart.validator');
 
 // @route POST /api/cart/

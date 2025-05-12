@@ -5,13 +5,13 @@ const { validationResult } = require('express-validator');
 
 // Add a product to the cart
 exports.addToCart = async (req, res) => {
-     // Check validation errors
-     const errors = validationResult(req);
-     if (!errors.isEmpty()) {
-         return res.status(400).json({ error: errors.array() });
-     }
+    // Check validation errors
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ error: errors.array() });
+    }
     const { productId, quantity, size, color, guestId, userId } = req.body;
-    
+
     try {
 
         // 1. Find the product by ID
@@ -64,9 +64,9 @@ exports.addToCart = async (req, res) => {
 
             await cart.save();
 
-            return res.status(200).json({ 
+            return res.status(200).json({
                 msg: 'Product successfully added to cart',
-                cart 
+                cart
             });
         }
 
@@ -87,9 +87,9 @@ exports.addToCart = async (req, res) => {
         });
 
         await newCart.save();
-        return res.status(200).json({ 
+        return res.status(200).json({
             msg: 'New cart created with product',
-            cart: newCart 
+            cart: newCart
         });
 
     } catch (error) {
@@ -111,12 +111,12 @@ exports.addToCart = async (req, res) => {
 
 // Update cart
 exports.updateQuantity = async (req, res) => {
-     // Check validation errors
-     const errors = validationResult(req);
-     if (!errors.isEmpty()) {
-         return res.status(400).json({ error: errors.array() });
-     }
-     
+    // Check validation errors
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ error: errors.array() });
+    }
+
     const { productId, quantity, size, color, guestId, userId } = req.body;
 
     try {
@@ -160,9 +160,9 @@ exports.updateQuantity = async (req, res) => {
 
         await cart.save();
 
-        return res.status(200).json({ 
+        return res.status(200).json({
             msg: 'Cart quantity updated successfully',
-            cart 
+            cart
         });
 
     } catch (error) {
@@ -243,17 +243,20 @@ exports.getCart = async (req, res) => {
         // 1. Get user's or guest's cart
         const cart = await getCart(userId, guestId);
         if (!cart) {
-            return res.status(404).json({ message: 'Cart not found' });
+            return res.status(200).json({ 
+                msg: "Cart empty - new guest/user", 
+                cart: { products: [] } 
+            });
         }
 
         return res.status(200).json({
             msg: "Cart fetched successfully",
             cart
         });
-        
+
 
     } catch (error) {
-        console.error('💥 deleteCartitem error:', {
+        console.error('💥 getCart error: ', {
             message: error.message,
             stack: error.stack,
             context: { productId, userId, guestId }
@@ -270,14 +273,14 @@ exports.getCart = async (req, res) => {
 
 exports.mergeCart = async (req, res) => {
     const { guestId } = req.body;
+    
+    if (!req.user || !req.user._id) {
+        return res.status(401).json({ message: 'Unauthorized: Missing user info' });
+    }
 
     try {
-        const guestCart = await Cart.findOne({ guestId });
+        const guestCart = await Cart.findOne({ guestId : guestId });
         const userCart = await Cart.findOne({ user: req.user._id });
-
-        if (!guestCart) {
-            return res.status(404).json({ message: 'Guest cart is empty' });
-        }
 
         if (userCart) {
             // Merge guest cart items into user cart
@@ -302,11 +305,11 @@ exports.mergeCart = async (req, res) => {
             );
 
             await userCart.save();
-            
+
             // delete guest cart after merging
             await guestCart.deleteOne();
 
-            return res.status(200).json({ 
+            return res.status(200).json({
                 msg: 'Guest cart successfully merged with user cart',
                 cart: userCart
             });
@@ -316,7 +319,7 @@ exports.mergeCart = async (req, res) => {
             guestCart.guestId = undefined;
             await guestCart.save();
 
-            return res.status(200).json({ 
+            return res.status(200).json({
                 msg: 'Guest cart successfully transferred to user account',
                 cart: guestCart
             });
