@@ -16,14 +16,14 @@ router.post('' , protect , createCheckout);
 // @desc pay for checkout
 // @access Privet
 
-router.put(':id/pay', protect, checkoutPayed);
+router.put('/:id/pay', protect, checkoutPayed);
 
 
 // @route POST /api/checkout/:id/finalize
 // @desc finalize checkout and create order
 // @access Privet
 
-router.post(':id/finalize', protect, finalizeCheckout);
+router.post('/:id/finalize', protect, finalizeCheckout);
 
 
 
