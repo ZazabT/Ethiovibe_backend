@@ -9,7 +9,7 @@ exports.getMyOrders = async (req, res) => {
     try {
         // find all order of the user
         const orders = await Order.find({user : req.user._id}).sort({createdAt : -1});
-        res.status(200).json(orders);
+        res.status(200).json({msg : 'Orders Fetched Successfully', orders});
     } catch (error) {
         console.error('💥Fetching error:', {
             message: error.message,

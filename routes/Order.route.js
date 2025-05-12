@@ -8,14 +8,14 @@ const {getMyOrders, getOrderDetails} = require('../controllers/Order.controller'
 // @desc get my order
 // @access Privet
 
-router.get('my-order', protect, getMyOrders);
+router.get('/my-order', protect, getMyOrders);
 
 
 // @route GET /api/my-order/
 // @desc get order details by id
 // @access Privet
 
-router.get('my-order/:id', protect, getOrderDetails);
+router.get('/my-order/:id', protect, getOrderDetails);
 
 
 module.exports = router;
