@@ -138,10 +138,11 @@ exports.deleteUser = async (req, res) => {
 
     try {
         // delete user
-        await user.deleteOne();
+       await user.deleteOne();
 
         res.status(200).json({
-            msg: 'User deleted successfully'
+            msg: 'User deleted successfully',
+            user
         })
     } catch (error) {
         console.error("Admin delete user error:", error);

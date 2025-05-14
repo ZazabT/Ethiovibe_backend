@@ -83,7 +83,8 @@ exports.deleteOrder = async ( req , res )=>{
         await order.deleteOne();
 
         res.status(200).json({
-            msg: 'Order deleted successfully'
+            msg: 'Order deleted successfully',
+            order
         });
     } catch (error) {
         console.error("Admin delete Order error:", error);
