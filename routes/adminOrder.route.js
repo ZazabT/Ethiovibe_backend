@@ -6,7 +6,7 @@ const { getAllOrders ,deleteOrder ,updateOrder} = require('../controllers/adminO
 // @route GET /api/admin/orders
 // @desc Get all orders (admin only)
 // @access Private (Admin)
-router.get('/' , admin , protect , getAllOrders);
+router.get('/'  , protect , admin , getAllOrders);
 
 
 
@@ -14,13 +14,13 @@ router.get('/' , admin , protect , getAllOrders);
 // @route PUT /api/admin/orders/:id
 // @desc Update a orders (admin only)
 // @access Private (Admin)
-router.put('/:id' , admin , protect , updateOrder);
+router.put('/:id' , protect , admin  ,  updateOrder);
 
 
 // @route DELETE /api/admin/orders/:id
 // @desc Delete a orders (admin only)
 // @access Private (Admin)
-router.delete('/:id' , admin , protect , deleteOrder);
+router.delete('/:id'  , protect , admin , deleteOrder);
 
 
 
