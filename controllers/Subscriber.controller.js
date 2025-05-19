@@ -23,7 +23,6 @@ exports.subscribe = async (req, res) => {
         // create a new subscriber
         const newSubscriber = new Subscriber({
             email,
-            status: 'ACTIVE',
             subscribedAt: new Date()
         });
 
@@ -88,3 +87,30 @@ exports.getAllSubscribers = async (req, res) => {
 //         });
 //     }
 // };
+
+
+exports.deleteSubscriber = async (req, res) => {
+   const { id } = req.params;
+
+    try {
+        const subscriber = await Subscriber.findById(id);
+
+        if (!subscriber) {
+            return res.status(404).json({ msg: 'Subscriber not found' });
+        }  
+
+        await subscriber.remove();
+
+        res.status(200).json({
+            msg: 'Subscriber deleted successfully',
+            subscriber
+        });
+
+    } catch (error) {
+        console.error('Delete subscriber error:', error);
+        res.status(500).json({
+            error: 'Server Error',
+            msg: error.message || 'An unexpected error occurred while deleting the subscriber'
+        }); 
+    }
+}
