@@ -99,7 +99,7 @@ exports.deleteSubscriber = async (req, res) => {
             return res.status(404).json({ msg: 'Subscriber not found' });
         }  
 
-        await subscriber.remove();
+        await subscriber.deleteOne();
 
         res.status(200).json({
             msg: 'Subscriber deleted successfully',

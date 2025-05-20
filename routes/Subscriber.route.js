@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const {protect , admin} = require('../middleware/auth.middleware');
-const { getAllSubscribers , subscribe} = require('../controllers/Subscriber.controller')
+const { getAllSubscribers , subscribe , deleteSubscriber} = require('../controllers/Subscriber.controller')
 
 
 // @route GET /api/subscribe/
@@ -16,6 +16,13 @@ router.get('/', protect, admin ,getAllSubscribers);
 // @access public
 
 router.post('/', subscribe);
+
+
+// @route DELETE /api/subscribe/
+// @desc delete subscriber 
+// @access Privet and admin
+
+router.delete('/:id', protect, admin, deleteSubscriber);
 
 
 

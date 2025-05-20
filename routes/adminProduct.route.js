@@ -6,7 +6,7 @@ const Product = require('../models/Product.model');
 // @route GET /api/admin/products
 // @desc Get all products (admin only)
 // @access Private (Admin)
-router.get('/' , admin , protect , async (req , res) => {
+router.get('/'  , protect , admin , async (req , res) => {
     try {
         const products = await Product.find() 
             .sort({ createdAt: -1 }) 
